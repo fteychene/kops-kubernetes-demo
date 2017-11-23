@@ -72,15 +72,12 @@ kops create cluster \
     $NAME
 ```
 
-## Edit configuration
-```bash
-kops edit cluster ${NAME}
-```
-
 ## Create cluster
 ```bash
 kops update cluster ${NAME} --yes
 ```
+
+You can edit the cluster configuratin in kops with the command `kops edit cluster ${NAME}`
 
 # Configuration cluster
 
