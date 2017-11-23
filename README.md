@@ -35,7 +35,7 @@ Create sub domain and get NameServers
 ID=$(uuidgen) && aws route53 create-hosted-zone --name $KUBERNETES_DOMAIN --caller-reference $ID | jq .DelegationSet.NameServers
 ```
 
-Change the nameservers in the [subdomain.json]() file by the one returned by the command.
+Change the nameservers in the [subdomain.json](./subdomain.json) file by those returned by the command.
 
 Apply subdomain routing in parent hosted zone
 ```bash
