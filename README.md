@@ -86,8 +86,7 @@ kops update cluster ${NAME} --yes
 
 ## Deploy heapster
 ```bash
-kubectl create -f influxdb/
-kubectl create -f rbac/heapster-rbac.yaml
+kubectl create -f heapster/
 ```
 
 ## Deploy dashboard
@@ -95,14 +94,16 @@ kubectl create -f rbac/heapster-rbac.yaml
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
 # Add admin right to dashboard service account (should not be done in real env)
 kubectl apply -f dashboard-admin-role.yaml
+kubectl proxy &
 ```
-http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/
+You can access to the deployed dashboard at http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/
 
 ## Deploy weave scope
 ```bash
 kubectl apply --namespace kube-system -f "https://cloud.weave.works/k8s/scope.yaml?k8s-version=$(kubectl version | base64 | tr -d '\n')"
-kubectl port-forward -n kube-system "$(kubectl get -n kube-system pod --selector=weave-scope-component=app -o jsonpath='{.items..metadata.name}')" 4040
+kubectl port-forward -n kube-system "$(kubectl get -n kube-system pod --selector=weave-scope-component=app -o jsonpath='{.items..metadata.name}')" 4040 &
 ```
+Weave scope is available at http://localhost:4040
 
 ## Install tiller (helm)
 ```bash
@@ -116,16 +117,20 @@ helm init
 helm install --name jenkins stable/jenkins
 printf $(kubectl get secret --namespace default jenkins-jenkins -o jsonpath="{.data.jenkins-admin-password}" | base64 --decode);echo
 ```
+You can find the external address by running the command `kubectl get svc jenkins-jenkins`
 
 ## Helm Graphana
 ```bash
 helm install --name grafana stable/grafana
 kubectl get secret --namespace default grafana-grafana -o jsonpath="{.data.grafana-admin-password}" | base64 --decode ; echo
-kubectl --namespace default port-forward $(kubectl get pods --namespace default -l "app=grafana-grafana,component=grafana" -o jsonpath="{.items[0].metadata.name}") 3000
+kubectl --namespace default port-forward $(kubectl get pods --namespace default -l "app=grafana-grafana,component=grafana" -o jsonpath="{.items[0].metadata.name}") 3000 &
 ```
+Grafana will be aviable on http://localhost:3000
 
 ## Sock shop sample
 ```bash
 kubectl create namespace sock-shop
 kubectl apply -f prezkube.tabmo.net/sock-shop.yaml --namespace sock-shop
 ```
+
+You can find the external address by running the command `kubectl -n sock-shop get svc sock-shop`
