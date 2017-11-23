@@ -1,0 +1,27 @@
+{
+    "Comment": "Create a subdomain NS record in the parent domain",
+    "Changes": [
+      {
+        "Action": "CREATE",
+        "ResourceRecordSet": {
+          "Name": "prezkube.tabmo.net",
+          "Type": "NS",
+          "TTL": 300,
+          "ResourceRecords": [
+            {
+              "Value": "ns-1690.awsdns-19.co.uk"
+            },
+            {
+              "Value": "ns-747.awsdns-29.net"
+            },
+            {
+              "Value": "ns-1098.awsdns-09.org"
+            },
+            {
+              "Value": "ns-432.awsdns-54.com"
+            }
+          ]
+        }
+      }
+    ]
+  }
