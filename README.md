@@ -35,7 +35,7 @@ Create sub domain and get NameServers
 ID=$(uuidgen) && aws route53 create-hosted-zone --name $KUBERNETES_DOMAIN --caller-reference $ID | jq .DelegationSet.NameServers
 ```
 
-Change the nameservers in the [subdomain.json](./subdomain.json) file by those returned by the command.
+Change the nameservers and the cluster name if needed in the [subdomain.json](./subdomain.json) file by those returned by the command.
 
 Apply subdomain routing in parent hosted zone
 ```bash
@@ -87,8 +87,9 @@ kubectl create -f heapster/
 ```
 
 ## Deploy dashboard
+Dashboard version si set to 1.7 last to be compatible with Kops 1.7 installation (to change when moving to Kubernetes 1.8)
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/6dc75162dce25b5a94aa500ebba923e8223e5cfd/src/deploy/recommended/kubernetes-dashboard.yaml
 # Add admin right to dashboard service account (should not be done in real env)
 kubectl apply -f dashboard-admin-role.yaml
 kubectl proxy &
